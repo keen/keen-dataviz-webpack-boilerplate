@@ -1,0 +1,29 @@
+{
+  "name": "keen-dataviz-example1",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "demo": "node server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adamkasprowicz/keen-dataviz-example1.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adamkasprowicz/keen-dataviz-example1/issues"
+  },
+  "homepage": "https://github.com/adamkasprowicz/keen-dataviz-example1#readme",
+  "devDependencies": {
+    "css-loader": "^1.0.0",
+    "express": "^4.16.3",
+    "style-loader": "^0.22.1",
+    "webpack": "^4.16.5"
+  },
+  "dependencies": {
+    "keen-analysis": "^3.0.4",
+    "keen-dataviz": "^3.0.9"
+  }
+}
