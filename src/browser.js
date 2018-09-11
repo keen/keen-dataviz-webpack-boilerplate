@@ -13,11 +13,11 @@ let savedQueryName = 'orders-per-week';
 
 if (window.location.href.indexOf('forceNewSavedQuery') > -1) {
   // just for debugging - create new saved query every time: http://localhost:3000/?forceNewSavedQuery=1
-  savedQueryName = 'orders-per-week-' + Math.floor(Math.random() * 100);
+  savedQueryName = 'orders-per-week-' + Math.floor(Math.random() * 100 * Math.random() * 100);
 }
 
 function createNewSavedQuery(){
-  console.log('create new saved query');
+  console.log('create new saved query...');
   client
     .put(client.url('queries', 'saved', savedQueryName))
     .auth(client.masterKey())
@@ -25,9 +25,16 @@ function createNewSavedQuery(){
       query: {
         analysis_type: 'count',
         event_collection: 'logins',
-        timeframe: 'this_17_days',
-        interval: 'daily',
-        refresh_rate: 14400
+        timeframe: 'this_303_days',
+        interval: 'weekly',
+        refresh_rate: 14400,
+        filters: [
+          {
+            operator: 'eq',
+            property_name: 'geo_information.country',
+            property_value: 'China'
+          }
+        ]
       },
       metadata: {
         display_name: 'Weekly Number of Logins',
@@ -37,7 +44,7 @@ function createNewSavedQuery(){
       }
     })
     .then(res => {
-      console.log('created...', res);
+      console.log('... created', res);
       return getResult();
     })
     .catch(err => {
@@ -46,20 +53,27 @@ function createNewSavedQuery(){
 }
 
 function getResult(){
-  console.log('run getResult');
+  console.log('run getResult for saved query named: ', savedQueryName);
   return client
     .query('saved', savedQueryName)
     .then(res => {
       console.log('got result', res);
 
+      if (!res.result) {
+        const seconds = 10;
+        console.log(`... no result yet, running query again in ${seconds} secs`);
+        setTimeout(() => {
+          getResult();
+        }, 1000 * seconds);
+        return;
+      }
+
       // create a keenDataviz instance
       const ordersperweekDataviz = new KeenDataviz({
         container: '#my-chart-div',
-        type: 'area'
+        type: 'area',
+        results: res // pass the response into the KeenDataviz instance
       });
-      // pass the response into the KeenDataviz instance
-      ordersperweekDataviz.render(res);
-
     })
     .catch(err => {
       if (err && !err.ok && err.error_code === 'ResourceNotFoundError') {
