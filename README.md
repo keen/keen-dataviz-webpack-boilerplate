@@ -21,3 +21,6 @@ npm run demo
 ```
 
 Open: [http://localhost:3000/](http://localhost:3000/)
+
+Just for debugging - create new saved query every time:
+[http://localhost:3000/?forceNewSavedQuery=1](http://localhost:3000/?forceNewSavedQuery=1)
